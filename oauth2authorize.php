@@ -36,7 +36,7 @@ require_once('simple_html_dom.php');
 $current_user_email = $_GET['mail'];
 
 //get the contents of the box.com login page...
-$boxappurl = 'https://app.box.com'
+$boxappurl = 'https://app.box.com';
 
 $box_popup_html = file_get_contents($boxappurl . '/api/oauth2/authorize?client_id='.$_GET['client_id'].'&response_type='.$_GET['response_type'].'&redirect_uri='.$_GET['redirect_uri'].'&state='.$_GET['state'].'&scope='.$_GET['scope']);
 

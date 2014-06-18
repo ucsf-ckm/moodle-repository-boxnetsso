@@ -36,14 +36,12 @@ class repository_boxnetsso extends repository_boxnet {
   protected $boxappurl;
 
   public function __construct($repositoryid, $context = SYSCONTEXTID, $options = array()) {
+    parent::__construct($repositoryid, $context, $options);
 
     $clientid = get_config('boxnetsso', 'clientid');
     $clientsecret = get_config('boxnetsso', 'clientsecret');
 
-    if (empty($clientid) and empty($clientsecret)) {
-      // just use boxnet's secret if it is set
-      parent::__construct($repositoryid, $context, $options);
-    } else {
+    if (!(empty($clientid) and empty($clientsecret))) {
       $returnurl = new moodle_url('/repository/repository_callback.php');
       $returnurl->param('callback', 'yes');
       $returnurl->param('repo_id', $this->id);
