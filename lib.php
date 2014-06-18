@@ -36,39 +36,23 @@ class repository_boxnetsso extends repository_boxnet {
   protected $boxappurl;
 
   public function __construct($repositoryid, $context = SYSCONTEXTID, $options = array()) {
-    parent::__construct($repositoryid, $context, $options);
 
-    $clientid = get_config('boxnet', 'clientid');
-    $clientsecret = get_config('boxnet', 'clientsecret');
-    $this->boxappurl = get_config('boxnetsso', 'customboxurl');
-    if (empty($boxappurl)) {
-      $this->boxappurl = 'https://app.box.com';
+    $clientid = get_config('boxnetsso', 'clientid');
+    $clientsecret = get_config('boxnetsso', 'clientsecret');
+
+    if (empty($clientid) and empty($clientsecret)) {
+      // just use boxnet's secret if it is set
+      parent::__construct($repositoryid, $context, $options);
+    } else {
+      $returnurl = new moodle_url('/repository/repository_callback.php');
+      $returnurl->param('callback', 'yes');
+      $returnurl->param('repo_id', $this->id);
+      $returnurl->param('sesskey', sesskey());
+
+      $this->boxnetclient = new boxnetsso_client($clientid, $clientsecret, $returnurl, '');
     }
-
-    $returnurl = new moodle_url('/repository/repository_callback.php');
-    $returnurl->param('callback', 'yes');
-    $returnurl->param('repo_id', $this->id);
-    $returnurl->param('sesskey', sesskey());
-
-    $this->boxnetclient = new boxnetsso_client($clientid, $clientsecret, $returnurl, '');
   }
 
-
-  /**
-   * Get file listing
-   *
-   * @param string $path
-   * @param string $page
-   * @return mixed
-   */
-  public function get_listing($fullpath = '', $page = ''){
-    global $OUTPUT;
-
-    $ret = parent::get_listing($fullpath, $page);
-    $ret['manage'] = $this->boxappurl . '/login/sso';
-
-    return $ret;
-  }
 
   /**
    * Return login form
@@ -89,36 +73,6 @@ class repository_boxnetsso extends repository_boxnet {
     } else {
       echo html_writer::link($url, get_string('login', 'repository'), array('target' => '_blank'));
     }
-  }
-
-  /**
-   * Names of the plugin settings
-   *
-   * @return array
-   */
-  public static function get_type_option_names() {
-    $arr = parent::get_type_option_names();
-    $arr[] = 'customboxurl';
-
-    // return $arr;
-    return array('clientid', 'clientsecret', 'pluginname', 'customboxurl');
-  }
-
-  /**
-   * Add Plugin settings input to Moodle form
-   *
-   * @param moodleform $mform
-   * @param string $classname
-   */
-  public static function type_config_form($mform, $classname = 'repository') {
-    global $CFG;
-    parent::type_config_form($mform);
-
-    $mform->addElement('text', 'customboxurl', get_string('customboxurl', 'repository_boxnetsso'),
-		       array('size' => '40'));
-    $mform->setType('customboxurl', PARAM_URL);
-
-    $mform->addElement('static', 'customboxurl_intro', '', get_string('customboxurl_intro', 'repository_boxnetsso'));
   }
 
 }

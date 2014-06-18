@@ -27,5 +27,3 @@ $string['boxnetsso:view'] = 'View Box SSO repository';
 $string['configplugin'] = 'Box SSO configuration';
 $string['pluginname_help'] = 'Repository on Box SSO';
 $string['pluginname'] = 'Box SSO';
-$string['customboxurl'] = 'Custom URL to app.box.com';
-$string['customboxurl_intro'] = 'Custom URL can be used here: https://myschool.app.box.com.  If you leave this empty, the default URL, https://app.box.com, will be used.';
