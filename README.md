@@ -16,7 +16,7 @@ cd /var/www/moodle
 git clone https://github.com/ucsf-ckm/moodle-repository-boxnetsso.git repository/boxnetsso
 ```
 
-You can also add this as a git submodule:
+You could also add this as a git submodule instead of cloning:
 ```bash
 git submodule add https://github.com/ucsf-ckm/moodle-repository-boxnetsso.git repository/boxnetsso
 ```
@@ -27,9 +27,9 @@ git submodule add https://github.com/ucsf-ckm/moodle-repository-boxnetsso.git re
 
 Search for this line:
 ```php
-                        window.open(loginurl, 'repo_auth', 'location=0,status=0,width=500,height=300,scrollbars=yes');
+window.open(loginurl, 'repo_auth', 'location=0,status=0,width=500,height=300,scrollbars=yes');
 ```
 to:
 ```php
-                        window.open(loginurl, 'repo_auth', 'location=0,status=0,width=500,height=600,scrollbars=yes');
+window.open(loginurl, 'repo_auth', 'location=0,status=0,width=500,height=600,scrollbars=yes');
 ```
